@@ -3,7 +3,8 @@
     "version": "1.0.0",
     "description": "",
     "scripts": {
-        "client": "cd Frontend && npm run dev"
+        "client": "cd Frontend && npm run dev",
+        "server": "cd Backend && npm run dev"
     },
     "keywords": [],
     "author": "",

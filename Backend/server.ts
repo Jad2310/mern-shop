@@ -1,9 +1,12 @@
 import express from "express";
 import dotenv from "dotenv";
-import { PrismaClient } from "@prisma/client";
+import connectDB from "./config/db";
+
 import "colors";
 
 dotenv.config();
+
+connectDB();
 
 const app = express();
 
