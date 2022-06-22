@@ -57,4 +57,42 @@ const createProduct = asyncHandler(async (req, res) => {
     res.status(201).json(createdProduct);
 });
 
-export { getProducts, getProductById, deleteProduct, createProduct };
+//@desc    Update a product
+//@route   PUT /api/products/:id
+//@access  Private/Admin
+const updateProduct = asyncHandler(async (req, res) => {
+    const product = await Product.findById(req.params.id);
+
+    if (product) {
+        const tmpProduct = {
+            name: req.body.name ? req.body.name : product.name,
+            brand: req.body.brand ? req.body.brand : product.brand,
+            category: req.body.category ? req.body.category : product.category,
+            countInStock: req.body.countInStock
+                ? req.body.countInStock
+                : product.countInStock,
+            description: req.body.description
+                ? req.body.description
+                : product.description,
+            image: req.body.image ? req.body.image : product.image,
+            price: req.body.price ? req.body.price : product.price,
+            rating: req.body.rating ? req.body.rating : product.rating,
+        };
+        const updatedProduct = await Product.findByIdAndUpdate(
+            req.params.id,
+            tmpProduct
+        );
+        res.status(200).json(updatedProduct);
+    } else {
+        res.status(404);
+        throw new Error("Product not found");
+    }
+});
+
+export {
+    getProducts,
+    getProductById,
+    deleteProduct,
+    createProduct,
+    updateProduct,
+};
