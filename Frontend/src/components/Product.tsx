@@ -1,36 +1,38 @@
-import { Col, Card } from "react-bootstrap";
+import { Card } from "react-bootstrap";
 import Rating from "./Rating";
 import { Link } from "react-router-dom";
 
 interface IProps {
-  image: string;
-  title: string;
-  rating: number;
-  reviews?: number;
-  price: number;
+  product: IProduct;
 }
 
 function Product(props: IProps) {
+  const { _id, image, name, rating, numReviews, price } = props.product;
   return (
-    <Col>
-      <Link
-        to={`/product/123`}
-        style={{ textDecoration: "none", color: "black" }}
-      >
-        <Card className="p-3" style={{ width: "18rem" }}>
-          <Card.Img src={props.image} />
-          <Card.Body>
-            <Card.Title as="div">
-              <strong>{props.title}</strong>
-            </Card.Title>
-            <Card.Text>
-              <Rating value={props.rating} text={`${props.reviews} reviews`} />
-            </Card.Text>
-            <Card.Text>Price: ${props.price}</Card.Text>
-          </Card.Body>
-        </Card>
+    <Card className="my-3 p-3 rounded">
+      <Link to={`/product/${_id}`}>
+        <Card.Img src={image} variant="top" />
       </Link>
-    </Col>
+
+      <Card.Body>
+        <Link
+          to={`/product/${_id}`}
+          style={{ color: "black", textDecoration: "none" }}
+        >
+          <Card.Title as="div">
+            <h5>{name}</h5>
+          </Card.Title>
+        </Link>
+
+        <Card.Text className="my-3" as="div">
+          <Rating value={rating} text={`${numReviews} reviews`} />
+        </Card.Text>
+
+        <Card.Text className="mt-1" as="h5">
+          Price: ${price}
+        </Card.Text>
+      </Card.Body>
+    </Card>
   );
 }
 

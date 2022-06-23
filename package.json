@@ -4,9 +4,13 @@
     "description": "",
     "scripts": {
         "client": "cd Frontend && npm run dev",
-        "server": "cd Backend && npm run dev"
+        "server": "cd Backend && npm run dev",
+        "both": "concurrently \"npm run client\" \"npm run server\""
     },
     "keywords": [],
     "author": "",
-    "license": "ISC"
+    "license": "ISC",
+    "dependencies": {
+        "concurrently": "^7.2.2"
+    }
 }

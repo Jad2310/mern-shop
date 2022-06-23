@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Row,
   Col,
@@ -9,16 +9,41 @@ import {
   FormSelect,
   Button,
 } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { Rating, Header } from "../components";
-import products from "../../../Backend/Products";
-import useRandProduct from "../utils/useRandProduct";
+import SpinnerComponent from "../components/Spinner";
+import {
+  getProductById,
+  reset,
+} from "../features/products/productDetailsSlice";
 
 function ProductPage() {
-  // Just for debugging
-  const product = useRandProduct(products);
-
+  const { id } = useParams();
   const [qty, setQty] = useState(1);
+
+  const dispatch = useAppDispatch();
+
+  const productDetails = useAppSelector((state) => state.productDetails);
+
+  const { product, isLoading, isError, message } = productDetails;
+
+  useEffect(() => {
+    if (isError) {
+      console.error(message);
+    }
+    if (!product?._id || product._id !== id) {
+      dispatch(getProductById(id!));
+    }
+
+    return () => {
+      dispatch(reset());
+    };
+  }, []);
+
+  if (isLoading) {
+    return <SpinnerComponent />;
+  }
 
   return (
     <>
@@ -104,7 +129,7 @@ function ProductPage() {
             </Card>
           </Col>
         </Row>
-        <h2 className="mt-5">REVIEWS</h2>
+        <h2 className="mt-5 mb-3 text-decoration-underline">REVIEWS</h2>
         <Container fluid>
           <ListGroup variant="flush">
             <ListGroup.Item>
