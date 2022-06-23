@@ -1,3 +1,4 @@
+import { Request } from "express";
 import asyncHandler from "express-async-handler";
 import Product from "../models/productModel";
 
@@ -89,10 +90,59 @@ const updateProduct = asyncHandler(async (req, res) => {
     }
 });
 
+//@desc    Create new review
+//@route   POST /api/products/:id/reviews
+//@access  Private
+const createProductReview = asyncHandler(
+    async (
+        req: Request<{ id: String }, {}, { rating: number; comment: string }>,
+        res
+    ) => {
+        const { rating, comment } = req.body;
+
+        const product = await Product.findById(req.params.id);
+
+        // TODO: check if user already reviewed the product
+
+        if (product) {
+            const review = {
+                name: "server",
+                rating: Number(rating),
+                comment,
+                user: "62b25b83a0848f6946c786ce", // TODO: change this
+            };
+
+            product.reviews.push(review);
+            product.numReviews = product.reviews.length;
+
+            product.rating =
+                product.reviews.reduce((acc, item) => item.rating + acc, 0) /
+                product.reviews.length;
+
+            await product.save();
+            res.status(201).json({ message: "Review added" });
+        } else {
+            res.status(404);
+            throw new Error("Product not found");
+        }
+    }
+);
+
+// @desc    Get top rated products
+// @route   GET /api/products/top
+// @access  Public
+const getTopProducts = asyncHandler(async (_req, res) => {
+    const products = await Product.find({}).sort({ rating: -1 }).limit(3);
+
+    res.send(products);
+});
+
 export {
     getProducts,
     getProductById,
     deleteProduct,
     createProduct,
     updateProduct,
+    createProductReview,
+    getTopProducts,
 };

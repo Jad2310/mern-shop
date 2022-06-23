@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import connectDB from "./config/db";
 import { Product, User } from "./models";
-import products from "./data/Products";
+import products from "./data/products";
 import users from "./data/users";
 
 import "colors";
