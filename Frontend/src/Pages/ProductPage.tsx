@@ -13,9 +13,12 @@ import { Link, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { Rating, Header } from "../components";
 import SpinnerComponent from "../components/Spinner";
+import { toast } from "react-toastify";
+
+import { addToCart, resetCart } from "../features/cart/cartSlice";
 import {
   getProductById,
-  reset,
+  resetProduct,
 } from "../features/products/productDetailsSlice";
 
 function ProductPage() {
@@ -25,30 +28,43 @@ function ProductPage() {
   const dispatch = useAppDispatch();
 
   const productDetails = useAppSelector((state) => state.productDetails);
+  const cart = useAppSelector((state) => state.cart);
 
   const { product, isLoading, isError, message } = productDetails;
 
   useEffect(() => {
     if (isError) {
-      console.error(message);
+      toast.error(message);
     }
+
+    if (cart.isError) {
+      toast.error(cart.message);
+    }
+
+    if (cart.isSuccess) {
+      toast.success("Product added to Cart");
+    }
+
     if (!product?._id || product._id !== id) {
       dispatch(getProductById(id!));
     }
-
     return () => {
-      dispatch(reset());
+      dispatch(resetProduct());
+      dispatch(resetCart());
     };
-  }, []);
+  }, [isError, cart]);
 
   if (isLoading) {
     return <SpinnerComponent />;
   }
 
+  if (!id) {
+    return <h3>No id</h3>;
+  }
+
   return (
     <>
       <Header />
-
       <Container fluid>
         <Link className="btn btn-light my-3" to="/">
           Go back
@@ -121,6 +137,9 @@ function ProductPage() {
                     className="w-100 py-2 my-2"
                     variant="dark"
                     disabled={product && product.countInStock === 0}
+                    onClick={() => {
+                      dispatch(addToCart({ id, qty }));
+                    }}
                   >
                     Add to Cart
                   </Button>

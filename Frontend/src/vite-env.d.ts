@@ -22,6 +22,7 @@ interface IProduct {
   numReviews: number;
   price: number;
   countInStock: number;
+  qty?: number;
   reviews: IReview[];
   createdAt: Date;
   updatedAt: Date;

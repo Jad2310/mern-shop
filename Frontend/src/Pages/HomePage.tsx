@@ -2,7 +2,8 @@ import { Header, Slider, Product } from "../components";
 import { Col, Container, Row } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { useEffect } from "react";
-import { getProducts, reset } from "../features/products/productSlice";
+import { toast } from "react-toastify";
+import { getProducts, resetProduct } from "../features/products/productSlice";
 import Spinner from "../components/Spinner";
 
 function HomePage() {
@@ -13,13 +14,13 @@ function HomePage() {
 
   useEffect(() => {
     if (isError) {
-      console.error(message); // TODO: Use react-toastify
+      toast.error(message);
     }
-
+    console.log("testt");
     dispatch(getProducts());
 
     return () => {
-      dispatch(reset());
+      dispatch(resetProduct());
     };
   }, []);
 
@@ -28,7 +29,7 @@ function HomePage() {
   }
 
   return (
-    <div className="App">
+    <>
       <Header />
 
       <Container className="">
@@ -47,7 +48,7 @@ function HomePage() {
           )}
         </Row>
       </Container>
-    </div>
+    </>
   );
 }
 

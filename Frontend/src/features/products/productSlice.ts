@@ -36,7 +36,7 @@ export const productSlice = createSlice({
   name: "product",
   initialState,
   reducers: {
-    reset: (_state) => {
+    resetProduct: (_state) => {
       initialState;
     },
   },
@@ -58,5 +58,5 @@ export const productSlice = createSlice({
   },
 });
 
-export const { reset } = productSlice.actions;
+export const { resetProduct } = productSlice.actions;
 export default productSlice.reducer;

@@ -13,12 +13,15 @@ export interface Product {
 }
 
 function useRandProduct(products: Product[]) {
+  console.log(products);
   const [product, setProduct] = useState<Product>();
 
   useEffect(() => {
-    setProduct(products[Math.floor(Math.random() * 6)]);
-  }, products);
+    //setProduct(products[Math.floor(Math.random() * 6)]);
+    setProduct(products[1]);
+  }, []);
 
+  console.log(product);
   return product;
 }
 

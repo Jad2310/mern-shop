@@ -20,7 +20,7 @@ const initialState: Initial = {
 
 // Fetch single product
 export const getProductById = createAsyncThunk(
-  "productDetails/getProductById",
+  "product/getProductById",
   async (id: string, thunkAPI) => {
     try {
       return await productService.getProductById(id);
@@ -32,11 +32,11 @@ export const getProductById = createAsyncThunk(
   }
 );
 
-export const productDetails = createSlice({
-  name: "productDetail",
+export const product= createSlice({
+  name: "product",
   initialState,
   reducers: {
-    reset: (_state) => {
+    resetProduct: (_state) => {
       initialState;
     },
   },
@@ -58,5 +58,5 @@ export const productDetails = createSlice({
   },
 });
 
-export const { reset } = productDetails.actions;
-export default productDetails.reducer;
+export const { resetProduct} = product.actions;
+export default product.reducer;
