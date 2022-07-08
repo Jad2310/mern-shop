@@ -1,21 +1,23 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import productService from "./productService";
-//import { RootState, AppThunk } from "../../app/store";
-
-interface Initial {
-  products: IProduct[];
+interface Slices<E> {
+  product: E;
   isError: boolean;
   isSuccess: boolean;
   isLoading: boolean;
   message: string;
 }
 
+interface Initial {
+  products: Slices<IProduct[]>;
+  product: Slices<IProduct | undefined>;
+  top: Slices<IProduct[]>
+}
+
 const initialState: Initial = {
-  products: [],
-  isError: false,
-  isSuccess: false,
-  isLoading: false,
-  message: "",
+  products: {product: [], isError: false, isSuccess: false, isLoading: false, message:""},
+  product: {product: undefined, isError: false, isSuccess: false, isLoading: false, message:"" },
+  top: {product: [], isError: false, isSuccess: false, isLoading: false, message:""} ,
 };
 
 // Fetch all products
@@ -32,6 +34,34 @@ export const getProducts = createAsyncThunk(
   }
 );
 
+// Get product detail
+export const getProductDetails = createAsyncThunk(
+  "product/getProductDetails",
+  async (id: string, thunkAPI) => {
+    try{
+      return await productService.getProductDetails(id)
+    } catch(error: any) {
+      const message =
+        error.response?.data?.message || error.message || error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+)
+
+// Get top rated products
+export const getTopProducts = createAsyncThunk(
+  "product/getTop",
+  async (_, thunkAPI) => {
+    try {
+      return await productService.getTopProducts()
+    } catch (error: any) {
+      const message =
+        error.response?.data?.message || error.message || error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+)
+
 export const productSlice = createSlice({
   name: "product",
   initialState,
@@ -43,17 +73,43 @@ export const productSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getProducts.pending, (state) => {
-        state.isLoading = true;
+        state.products.isLoading = true;
       })
       .addCase(getProducts.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isSuccess = true;
-        state.products = action.payload;
+        state.products.isLoading = false;
+        state.products.isSuccess = true;
+        state.products.product = action.payload;
       })
       .addCase(getProducts.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.message = action.payload as string;
+        state.products.isLoading = false;
+        state.products.isError = true;
+        state.products.message = action.payload as string;
+      })
+      .addCase(getProductDetails.pending, (state) => {
+        state.product.isLoading = true;
+      })
+      .addCase(getProductDetails.fulfilled, (state, action) => {
+        state.product.isLoading = false;
+        state.product.isSuccess = true;
+        state.product.product = action.payload;
+      })
+      .addCase(getProductDetails.rejected, (state, action) => {
+        state.product.isLoading = false;
+        state.product.isError = true;
+        state.product.message = action.payload as string;
+      })
+      .addCase(getTopProducts.pending, (state) => {
+        state.top.isLoading = true;
+      })
+      .addCase(getTopProducts.fulfilled, (state, action) => {
+        state.top.isLoading = false;
+        state.top.isSuccess = true;
+        state.top.product = action.payload;
+      })
+      .addCase(getTopProducts.rejected, (state, action) => {
+        state.top.isLoading = false;
+        state.top.isError = true;
+        state.top.message = action.payload as string;
       });
   },
 });

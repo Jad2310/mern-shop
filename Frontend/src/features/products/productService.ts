@@ -10,8 +10,25 @@ const getProducts = async () => {
 };
 
 
+// Fetch single product
+const getProductDetails = async (id: string) => {
+  const response = await axios.get(API_URL + `${id}`);
+
+  return response.data;
+};
+
+// Fetch top rated products
+const getTopProducts = async () => {
+  const response = await axios.get(API_URL + "top/")
+
+  return response.data
+}
+
 const productService = {
   getProducts,
+  getProductDetails,
+  getTopProducts
 };
+
 
 export default productService;
