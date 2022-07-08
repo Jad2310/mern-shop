@@ -1,4 +1,4 @@
-import { Header, Slider, Product } from "../components";
+import { Slider, Product } from "../components";
 import { Col, Container, Row } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { useEffect } from "react";
@@ -8,8 +8,8 @@ import Spinner from "../components/Spinner";
 
 function HomePage() {
   const dispatch = useAppDispatch();
-  const { products, isLoading, isError, message } = useAppSelector(
-    (state) => state.products
+  const { product, isLoading, isError, message } = useAppSelector(
+    (state) => state.products.products
   );
 
   useEffect(() => {
@@ -30,15 +30,13 @@ function HomePage() {
 
   return (
     <>
-      <Header />
-
-      <Container className="">
+      <Container>
         <Slider />
         <h1 className="text-uppercase mt-5 mb-3">Latest Products</h1>
 
         <Row>
-          {products.length > 0 ? (
-            products.map((product, _idx) => (
+          {product.length > 0 ? (
+            product.map((product, _idx) => (
               <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
                 <Product product={product} />
               </Col>

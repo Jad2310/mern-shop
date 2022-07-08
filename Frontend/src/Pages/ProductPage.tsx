@@ -11,15 +11,15 @@ import {
 } from "react-bootstrap";
 import { Link, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { Rating, Header } from "../components";
+import { Rating } from "../components";
 import SpinnerComponent from "../components/Spinner";
 import { toast } from "react-toastify";
 
 import { addToCart, resetCart } from "../features/cart/cartSlice";
 import {
-  getProductById,
+  getProductDetails,
   resetProduct,
-} from "../features/products/productDetailsSlice";
+} from "../features/products/productSlice";
 
 function ProductPage() {
   const { id } = useParams();
@@ -27,7 +27,7 @@ function ProductPage() {
 
   const dispatch = useAppDispatch();
 
-  const productDetails = useAppSelector((state) => state.productDetails);
+  const productDetails = useAppSelector((state) => state.products.product);
   const cart = useAppSelector((state) => state.cart);
 
   const { product, isLoading, isError, message } = productDetails;
@@ -46,7 +46,7 @@ function ProductPage() {
     }
 
     if (!product?._id || product._id !== id) {
-      dispatch(getProductById(id!));
+      dispatch(getProductDetails(id!));
     }
     return () => {
       dispatch(resetProduct());
@@ -64,7 +64,6 @@ function ProductPage() {
 
   return (
     <>
-      <Header />
       <Container fluid>
         <Link className="btn btn-light my-3" to="/">
           Go back

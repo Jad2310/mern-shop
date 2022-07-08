@@ -4,10 +4,12 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import "./App.css";
+import { Header } from "./components";
 
 function App() {
   return (
     <div className="App">
+      <Header />
       <Router>
         <Routes>
           <Route path="/">

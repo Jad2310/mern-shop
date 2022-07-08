@@ -6,8 +6,8 @@ import {
   Form,
   Button,
   Card,
+  Container,
 } from "react-bootstrap";
-import { Header } from "../components";
 //import useRandProduct from "../utils/useRandProduct";
 import Products from "../../../Backend/data/products";
 import { Link } from "react-router-dom";
@@ -18,8 +18,7 @@ function CartPage() {
   const [qty, setQty] = useState(1);
 
   return (
-    <>
-      <Header />
+    <Container>
       <Row>
         <Col md={8}>
           <h1>Shopping Cart</h1>
@@ -80,7 +79,7 @@ function CartPage() {
           </Card>
         </Col>
       </Row>
-    </>
+    </Container>
   );
 }
 
