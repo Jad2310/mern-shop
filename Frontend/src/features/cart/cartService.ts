@@ -8,11 +8,18 @@ const addToCart = async (id: string, qty: number) => {
 
   data.qty = qty;
 
+  return data;
+};
+
+const removeFromCart = async (id: string) => {
+  const response = await axios.get(API_URL + `${id}`);
+
   return response.data;
 };
 
 const cartService = {
   addToCart,
+  removeFromCart
 };
 
 export default cartService;

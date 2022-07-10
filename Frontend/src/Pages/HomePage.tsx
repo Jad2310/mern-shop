@@ -16,7 +16,6 @@ function HomePage() {
     if (isError) {
       toast.error(message);
     }
-    console.log("testt");
     dispatch(getProducts());
 
     return () => {

@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import cartService from "../cart/cartService";
 interface Initial {
-  cart: IProduct[];
+  cartElements: IProduct[];
   isError: boolean;
   isLoading: boolean;
   isSuccess: boolean;
@@ -14,7 +14,7 @@ interface ItemAddToCart {
 }
 
 const initialState: Initial = {
-  cart: [],
+  cartElements: [],
   isError: false,
   isLoading: false,
   isSuccess: false,
@@ -35,15 +35,28 @@ export const addToCart = createAsyncThunk(
   }
 );
 
+export const removeFromCart = createAsyncThunk(
+  "cart/removeFromCart",
+  async (id: string, thunkAPI) => {
+    try {
+      return await cartService.removeFromCart(id);
+    } catch (error: any) {
+      const message =
+        error.response?.data?.message || error.message || error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 export const cart = createSlice({
   name: "cart",
   initialState,
   reducers: {
     resetCart: (state) => {
-      state.isSuccess = false
-      state.isError = false
-      state.isLoading = false
-      state.message = ""
+      state.isSuccess = false;
+      state.isError = false;
+      state.isLoading = false;
+      state.message = "";
     },
   },
   extraReducers: (builder) => {
@@ -61,15 +74,31 @@ export const cart = createSlice({
         state.isError = false;
         state.isSuccess = true;
         const item = action.payload;
-        const existItem = state.cart.find((x) => x._id === item._id);
+        const existItem = state.cartElements.find((x) => x._id === item._id);
 
         if (existItem) {
-          state.cart = state.cart.map((x) =>
+          state.cartElements = state.cartElements.map((x) =>
             x._id === existItem._id ? item : x
           );
         } else {
-          state.cart = [...state.cart, item];
+          state.cartElements = [...state.cartElements, item];
         }
+      })
+      .addCase(removeFromCart.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(removeFromCart.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload as string;
+      })
+      .addCase(removeFromCart.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.cartElements = state.cartElements.filter(
+          (x) => x._id !== action.payload._id
+        );
       });
   },
 });

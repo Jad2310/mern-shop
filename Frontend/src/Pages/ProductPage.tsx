@@ -15,20 +15,20 @@ import { Rating } from "../components";
 import SpinnerComponent from "../components/Spinner";
 import { toast } from "react-toastify";
 
-import { addToCart, resetCart } from "../features/cart/cartSlice";
 import {
   getProductDetails,
   resetProduct,
 } from "../features/products/productSlice";
+import { useNavigate } from "react-router-dom";
 
 function ProductPage() {
   const { id } = useParams();
   const [qty, setQty] = useState(1);
 
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const productDetails = useAppSelector((state) => state.products.product);
-  const cart = useAppSelector((state) => state.cart);
 
   const { product, isLoading, isError, message } = productDetails;
 
@@ -36,23 +36,16 @@ function ProductPage() {
     if (isError) {
       toast.error(message);
     }
-
-    if (cart.isError) {
-      toast.error(cart.message);
-    }
-
-    if (cart.isSuccess) {
-      toast.success("Product added to Cart");
-    }
-
     if (!product?._id || product._id !== id) {
       dispatch(getProductDetails(id!));
     }
+    if (product?.qty) {
+      setQty(product.qty);
+    }
     return () => {
       dispatch(resetProduct());
-      dispatch(resetCart());
     };
-  }, [isError, cart]);
+  }, [isError]);
 
   if (isLoading) {
     return <SpinnerComponent />;
@@ -61,6 +54,8 @@ function ProductPage() {
   if (!id) {
     return <h3>No id</h3>;
   }
+
+  console.log(product);
 
   return (
     <>
@@ -137,7 +132,7 @@ function ProductPage() {
                     variant="dark"
                     disabled={product && product.countInStock === 0}
                     onClick={() => {
-                      dispatch(addToCart({ id, qty }));
+                      navigate(`/cart/${id}?qty=${qty}`);
                     }}
                   >
                     Add to Cart
