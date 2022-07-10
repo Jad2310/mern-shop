@@ -1,5 +1,11 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { HomePage, CartPage, ProductPage, LoginPage } from "./Pages";
+import {
+  HomePage,
+  CartPage,
+  ProductPage,
+  LoginPage,
+  RegisterPage,
+} from "./Pages";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -20,6 +26,7 @@ function App() {
             </Route>
             <Route path="product/:id" element={<ProductPage />} />
             <Route path="login/" element={<LoginPage />} />
+            <Route path="register/" element={<RegisterPage />} />
           </Route>
         </Routes>
       </Router>
