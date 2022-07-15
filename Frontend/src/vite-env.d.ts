@@ -27,3 +27,11 @@ interface IProduct {
   createdAt: Date;
   updatedAt: Date;
 }
+
+interface IUser {
+  _id: string;
+  name: string;
+  email: string;
+  isAdmin: boolean;
+  token: string;
+}

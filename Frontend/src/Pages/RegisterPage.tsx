@@ -1,6 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Container, Form, Button, Row, Col, Card } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import SpinnerComponent from "../components/Spinner";
+import { userRegister } from "../features/user/userSlice";
 
 function RegisterPage() {
   const [name, setName] = useState("");
@@ -8,10 +12,33 @@ function RegisterPage() {
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
 
+  const dispatch = useAppDispatch();
+  const registerState = useAppSelector((state) => state.users.userRegister);
+
+  const navigate = useNavigate();
+
+  const { user, isLoading } = registerState;
+
+  useEffect(() => {
+    if (user !== null) {
+      navigate("/");
+    }
+  });
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log({ name, email, password, password2 });
+
+    if (password !== password2) {
+      toast.error("Passwords do not match");
+      setPassword("");
+      setPassword2("");
+    } else {
+      dispatch(userRegister({ name, email, password }));
+    }
   };
+
+  if (isLoading) {
+    return <SpinnerComponent />;
+  }
 
   return (
     <Container>
@@ -26,6 +53,7 @@ function RegisterPage() {
                   <Form.Control
                     type="name"
                     placeholder="Enter name"
+                    value={name}
                     onChange={(e) => setName(e.target.value)}
                     required
                   />
@@ -35,6 +63,7 @@ function RegisterPage() {
                   <Form.Control
                     type="email"
                     placeholder="Enter email"
+                    value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
                   />
@@ -44,6 +73,7 @@ function RegisterPage() {
                   <Form.Control
                     type="password"
                     placeholder="Password"
+                    value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
                   />
@@ -53,6 +83,7 @@ function RegisterPage() {
                   <Form.Control
                     type="password"
                     placeholder="Retype Password"
+                    value={password2}
                     onChange={(e) => setPassword2(e.target.value)}
                     required
                   />
