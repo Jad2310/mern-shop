@@ -5,7 +5,7 @@ import Product from "../models/productModel";
 //@desc   Fetch all products
 //@route  GET /api/products
 //@access Public
-//TODO: pages
+//TODO: Different pages
 const getProducts = asyncHandler(async (_req, res) => {
     const products = await Product.find();
     res.json(products);

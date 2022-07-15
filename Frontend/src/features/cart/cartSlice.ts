@@ -58,6 +58,9 @@ export const cart = createSlice({
       state.isLoading = false;
       state.message = "";
     },
+    getCart: (state) => {
+      state.cartElements = JSON.parse(localStorage.getItem("cartItems")!);
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -75,6 +78,7 @@ export const cart = createSlice({
         state.isSuccess = true;
         const item = action.payload;
         const existItem = state.cartElements.find((x) => x._id === item._id);
+        let cartItems: IProduct[] = [];
 
         if (existItem) {
           state.cartElements = state.cartElements.map((x) =>
@@ -83,6 +87,17 @@ export const cart = createSlice({
         } else {
           state.cartElements = [...state.cartElements, item];
         }
+        if (localStorage.getItem("cartItems") !== null) {
+          cartItems = JSON.parse(localStorage.getItem("cartItems")!);
+        }
+
+        // Add product one time
+        // Because React Strict Mode is Stupid
+        if (cartItems.find((x) => x._id === item._id) === undefined) {
+          cartItems.push(item);
+        }
+
+        localStorage.setItem("cartItems", JSON.stringify(cartItems));
       })
       .addCase(removeFromCart.pending, (state) => {
         state.isLoading = true;
@@ -99,9 +114,16 @@ export const cart = createSlice({
         state.cartElements = state.cartElements.filter(
           (x) => x._id !== action.payload._id
         );
+        let oldCartItems: IProduct[] = JSON.parse(
+          localStorage.getItem("cartItems")!
+        );
+        let cartItems = oldCartItems.filter(
+          (x) => x._id !== action.payload._id
+        );
+        localStorage.setItem("cartItems", JSON.stringify(cartItems));
       });
   },
 });
 
-export const { resetCart } = cart.actions;
+export const { resetCart, getCart } = cart.actions;
 export default cart.reducer;

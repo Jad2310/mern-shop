@@ -11,7 +11,7 @@ import {
 } from "react-bootstrap";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { addToCart, removeFromCart } from "../features/cart/cartSlice";
+import { addToCart, removeFromCart, getCart } from "../features/cart/cartSlice";
 
 function CartPage() {
   const [searchParams, _setSearchParams] = useSearchParams();
@@ -25,10 +25,14 @@ function CartPage() {
   const { cartElements } = cart;
 
   useEffect(() => {
+    dispatch(getCart());
+  }, []);
+
+  useEffect(() => {
     if (id) {
       dispatch(addToCart({ id, qty }));
     }
-  }, []);
+  }, [id]);
 
   const removeFromCartHandler = (id: string) => {
     dispatch(removeFromCart(id));
