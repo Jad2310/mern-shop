@@ -5,7 +5,10 @@
     "scripts": {
         "client": "cd Frontend && npm run dev",
         "server": "cd Backend && npm run dev",
-        "both": "concurrently \"npm run client\" \"npm run server\""
+        "both": "concurrently \"npm run client\" \"npm run server\"",
+        "init:Frontend": "cd Frontend && npm install",
+        "init:Backend": "cd Backend && npm install",
+        "init": "npm install && npm run init:Frontend && npm run init:Backend"
     },
     "keywords": [],
     "author": "",
