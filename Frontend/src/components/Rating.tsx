@@ -4,8 +4,7 @@ interface IProps {
 }
 
 function Rating(props: IProps) {
-  //console.log("props: ", props);
-  if (props.value !== undefined)
+  if (props.value)
     return (
       <div className="rating">
         <span>

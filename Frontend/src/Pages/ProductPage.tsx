@@ -55,12 +55,10 @@ function ProductPage() {
     return <h3>No id</h3>;
   }
 
-  console.log(product);
-
   return (
     <>
       <Container fluid>
-        <Link className="btn btn-light my-3" to="/">
+        <Link className="btn btn-light mb-3" to="/">
           Go back
         </Link>
         <Row className="justify-content-center g-4">
@@ -142,22 +140,23 @@ function ProductPage() {
             </Card>
           </Col>
         </Row>
-        <h2 className="mt-5 mb-3 text-decoration-underline">REVIEWS</h2>
-        <Container fluid>
-          <ListGroup variant="flush">
-            <ListGroup.Item>
-              <h6>Jane Doe</h6>
-              <Rating value={4.5} />
-              <p>These are great headphones!</p>
-            </ListGroup.Item>
-
-            <ListGroup.Item>
-              <h6>Jane Doe</h6>
-              <Rating value={4.5} />
-              <p>These are great headphones!</p>
-            </ListGroup.Item>
-          </ListGroup>
-        </Container>
+        {
+          //<h2 className="mt-5 mb-3 text-decoration-underline">REVIEWS</h2>
+          //<Container fluid>
+          //<ListGroup variant="flush">
+          //<ListGroup.Item>
+          //<h6>Jane Doe</h6>
+          //<Rating value={4.5} />
+          //<p>These are great headphones!</p>
+          //</ListGroup.Item>
+          //<ListGroup.Item>
+          //<h6>Jane Doe</h6>
+          //<Rating value={4.5} />
+          //<p>These are great headphones!</p>
+          //</ListGroup.Item>
+          //</ListGroup>
+          //</Container>
+        }
       </Container>
     </>
   );

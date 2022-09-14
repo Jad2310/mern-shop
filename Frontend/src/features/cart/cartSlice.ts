@@ -59,7 +59,7 @@ export const cart = createSlice({
       state.message = "";
     },
     getCart: (state) => {
-      state.cartElements = JSON.parse(localStorage.getItem("cartItems")!);
+      state.cartElements = JSON.parse(localStorage.getItem("cartItems")!) || [];
     },
   },
   extraReducers: (builder) => {

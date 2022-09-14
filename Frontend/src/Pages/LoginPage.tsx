@@ -6,7 +6,7 @@ import {
   Row,
   Col,
   Card,
-  Alert,
+  Alert
 } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -20,7 +20,7 @@ function LoginPage() {
   const [error, setError] = useState("");
 
   const dispatch = useAppDispatch();
-  const userState = useAppSelector((state) => state.users.userLogin);
+  const userState = useAppSelector(state => state.users.userLogin);
 
   const navigate = useNavigate();
 
@@ -53,14 +53,14 @@ function LoginPage() {
           {isError ? <Alert variant="danger">{error}</Alert> : <></>}
           <Card className="mb-5">
             <Card.Body className="d-flex flex-column align-items-center">
-              <Form onSubmit={(e) => submitHandler(e)}>
+              <Form onSubmit={e => submitHandler(e)}>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                   <Form.Label>Email address</Form.Label>
                   <Form.Control
                     type="email"
                     placeholder="Enter email"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={e => setEmail(e.target.value)}
                     required
                   />
                 </Form.Group>
@@ -70,7 +70,7 @@ function LoginPage() {
                     type="password"
                     placeholder="Password"
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={e => setPassword(e.target.value)}
                     required
                   />
                 </Form.Group>

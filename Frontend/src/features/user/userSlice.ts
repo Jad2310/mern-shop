@@ -12,7 +12,6 @@ interface Slice<E> {
 interface Initial {
   userLogin: Slice<IUser | null>;
   userRegister: Slice<IUser | null>;
-  userDetails: Slice<IUser | null>;
 }
 
 interface LoginData {
@@ -39,13 +38,6 @@ const initialState: Initial = {
     isLoading: false,
     message: "",
   },
-  userDetails: {
-    user: null,
-    isError: false,
-    isSuccess: false,
-    isLoading: false,
-    message: "",
-  },
 };
 
 export const userLogin = createAsyncThunk(
@@ -65,16 +57,16 @@ export const userLogin = createAsyncThunk(
 export const userRegister = createAsyncThunk(
   "user/register",
   async (data: RegisterData, thunkAPI) => {
-    const { name, email, password } = data
+    const { name, email, password } = data;
     try {
-      return await userService.register(name, email, password)
+      return await userService.register(name, email, password);
     } catch (error: any) {
       const message =
         error.response?.data?.message || error.message || error.toString();
       return thunkAPI.rejectWithValue(message);
     }
   }
-)
+);
 
 export const userSlice = createSlice({
   name: "user",
@@ -85,9 +77,15 @@ export const userSlice = createSlice({
     },
     logout: (state) => {
       state.userLogin.user = null;
-      state.userDetails.user = null;
       state.userRegister.user = null;
+      localStorage.removeItem("userInfo");
       document.location.href = "/login";
+    },
+    searchLocalStorage: (state) => {
+      let local = localStorage.getItem("userInfo");
+      if (local) {
+        state.userLogin.user = JSON.parse(local);
+      }
     },
   },
   extraReducers: (builder) => {
@@ -122,5 +120,5 @@ export const userSlice = createSlice({
   },
 });
 
-export const { resetLoginUser, logout } = userSlice.actions;
+export const { resetLoginUser, logout, searchLocalStorage } = userSlice.actions;
 export default userSlice.reducer;

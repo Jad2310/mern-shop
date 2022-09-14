@@ -17,6 +17,7 @@ a {
 }
 
 .carousel-caption h2 {
+  margin-top: 8px;
   color: #fff;
 }
 
@@ -33,6 +34,6 @@ a {
 }
 @media (max-width: 900px) {
   .carousel-caption h2 {
-    font-size: 2.5vw;
+    font-size: 1em;
   }
 }

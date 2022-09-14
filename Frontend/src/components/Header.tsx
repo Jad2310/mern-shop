@@ -1,10 +1,15 @@
+import { useEffect } from "react";
 import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { logout } from "../features/user/userSlice";
+import { logout, searchLocalStorage } from "../features/user/userSlice";
 
 function Header() {
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(searchLocalStorage());
+  }, []);
 
   const userState = useAppSelector((state) => state.users.userLogin);
   const { user } = userState;
