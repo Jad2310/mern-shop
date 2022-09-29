@@ -1,4 +1,5 @@
-import { useEffect } from "react";
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { useEffect, useState } from "react";
 import {
   Col,
   ListGroup,
@@ -8,13 +9,17 @@ import {
   Button,
   Card,
   Container,
+  Spinner,
 } from "react-bootstrap";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { addToCart, removeFromCart, getCart } from "../features/cart/cartSlice";
+import { addToCart, removeFromCart, getCart, deleteCart } from "../features/cart/cartSlice";
 
 function CartPage() {
-  const [searchParams, _setSearchParams] = useSearchParams();
+  const [isLoading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+
+  const [searchParams] = useSearchParams();
 
   const { id } = useParams();
   const qty = searchParams.get("qty") ? Number(searchParams.get("qty")) : 1;
@@ -40,6 +45,25 @@ function CartPage() {
 
   const updateProductHandler = (id: string, qty: number) => {
     dispatch(addToCart({ id, qty }));
+  };
+
+  const CheckoutApi = () =>
+    new Promise<string>((resolve, _reject) => {
+      setTimeout(() => {
+        dispatch(deleteCart());
+        resolve("Checkout Complete");
+      }, 3000);
+    });
+
+  const handleCheckout = async () => {
+    console.log("Checkout");
+    setLoading(true);
+    const checkout = await CheckoutApi();
+
+    if (checkout) {
+      setLoading(false);
+      setSuccess(true);
+    }
   };
 
   return (
@@ -76,7 +100,11 @@ function CartPage() {
                             Number(e.target.value)
                           )
                         }
-                        disabled={product && product.countInStock === 0}
+                        disabled={
+                          (product && product.countInStock === 0) ||
+                          success ||
+                          isLoading
+                        }
                       >
                         {[...Array(product.countInStock).keys()].map((x) => (
                           <option key={x + 1} value={x + 1}>
@@ -89,6 +117,7 @@ function CartPage() {
                       <Button
                         type="button"
                         variant="light"
+                        disabled={success || isLoading}
                         onClick={() => removeFromCartHandler(product._id)}
                       >
                         <i className="fas fa-trash"></i>
@@ -118,13 +147,28 @@ function CartPage() {
                 </span>
               </ListGroup.Item>
               <ListGroup.Item>
-                <Button
-                  type="button"
-                  className="btn-block"
-                  onClick={() => console.log("Checkout!!")}
-                >
-                  Proceed To Checkout
-                </Button>
+                {!isLoading ? (
+                  <Button
+                    type="button"
+                    variant={success ? "success" : "primary"}
+                    className="btn-block"
+                    onClick={() => handleCheckout()}
+                    disabled={success}
+                  >
+                    {success ? "Checkout Complete" : "Proceed To Checkout"}
+                  </Button>
+                ) : (
+                  <Button variant="primary" disabled>
+                    <Spinner
+                      as="span"
+                      animation="border"
+                      size="sm"
+                      role="status"
+                      aria-hidden="true"
+                    />
+                    <span className="visually-hidden">Loading...</span>
+                  </Button>
+                )}
               </ListGroup.Item>
             </ListGroup>
           </Card>

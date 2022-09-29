@@ -61,6 +61,10 @@ export const cart = createSlice({
     getCart: (state) => {
       state.cartElements = JSON.parse(localStorage.getItem("cartItems")!) || [];
     },
+    deleteCart: (state) => {
+      state.cartElements = []
+      localStorage.setItem("cartItems", "[]")
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -114,10 +118,10 @@ export const cart = createSlice({
         state.cartElements = state.cartElements.filter(
           (x) => x._id !== action.payload._id
         );
-        let oldCartItems: IProduct[] = JSON.parse(
+        const oldCartItems: IProduct[] = JSON.parse(
           localStorage.getItem("cartItems")!
         );
-        let cartItems = oldCartItems.filter(
+        const cartItems = oldCartItems.filter(
           (x) => x._id !== action.payload._id
         );
         localStorage.setItem("cartItems", JSON.stringify(cartItems));
@@ -125,5 +129,5 @@ export const cart = createSlice({
   },
 });
 
-export const { resetCart, getCart } = cart.actions;
+export const { resetCart, getCart, deleteCart } = cart.actions;
 export default cart.reducer;

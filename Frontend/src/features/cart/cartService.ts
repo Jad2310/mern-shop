@@ -19,7 +19,7 @@ const removeFromCart = async (id: string) => {
 
 const cartService = {
   addToCart,
-  removeFromCart
+  removeFromCart,
 };
 
 export default cartService;
