@@ -1,6 +1,6 @@
 import { Request } from "express";
 import asyncHandler from "express-async-handler";
-import Product from "../models/productModel";
+import { Product } from "../models";
 
 //@desc   Fetch all products
 //@route  GET /api/products
@@ -51,7 +51,7 @@ const createProduct = asyncHandler(async (req, res) => {
         image,
         name,
         price,
-        user: "62b25b83a0848f6946c786ce", // TODO: change this
+        user: req.user,
     });
 
     const createdProduct = await product.save();

@@ -1,6 +1,5 @@
 const products = [
     {
-        _id: "123",
         name: "Airpods Wireless Bluetooth Headphones",
         image: "/images/airpods.jpg",
         description:
